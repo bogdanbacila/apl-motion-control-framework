@@ -10,6 +10,23 @@ TODO
 - [ ] define structure of the repo
 - [ ] create requirements, roadmap and product description (mission statement)
 
+Vision: 
+---
+
+- Create an inexpensive motion system to be used for audio research.
+- Open source and open hardware?
+- 3D printed connectors. 
+- Use parts which are already in every lab (e.g. stereo bars)  
+- Required to rotate various microphones on multiple axes. 
+- **Silent operation:** Critical. 
+- **Modular:** Ability to use different parts in order to create a simpler or a more complex design. 
+- **Easy to use:** 
+  - Plug-and-play operation. 
+  - Simple manual rotation. (Either phone or a different way)
+  - API to allow integration with other different programming environments. 
+
+
+
 TMP - Old instructions - to transfer to readme
 ---
 - Screenshots of the connection and control process are available in the “Screenshots folder”
