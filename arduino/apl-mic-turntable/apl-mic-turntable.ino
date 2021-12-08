@@ -1,3 +1,7 @@
+/*
+Author: Bogdan Bacila 
+        Applied Psychoacoustics Lab, University of Huddersfield, UK 
+*/
 
 #include <Arduino.h>
 #include <SoftwareSerial.h>
@@ -11,8 +15,12 @@
 
 // Motor steps per revolution. Most steppers are 200 steps or 1.8 degrees/step
 #define MOTOR_STEPS 200
+// Define motor speed
 #define RPM 5
 
+// Stepper driver used in this case: TMC2100. 
+// Useful resource for wiring up the motor to the Arduino: https://electropeak.com/learn/interfacing-tmc2100-stepper-motor-driver-with-arduino/
+// Please make sure the stepper driver is connected properly to both the Arduino and the motor to avoid damage of any of the parts. 
 // Since microstepping is set externally, make sure this matches the selected mode on your stepper driver
 // If it doesn't, the motor will move at a different RPM than chosen
 // 1=full step, 2=half step, 4=quarter step, etc.
@@ -22,9 +30,13 @@
 #define DIR_PIN 2
 #define STEP_PIN 3
 
+// add stepper motor instance.
 // 2-wire basic config, microstepping is hardwired on the driver
 BasicStepperDriver stepper(MOTOR_STEPS, DIR_PIN, STEP_PIN);
 
+// This device is configured to work with a HC-06 Bluetooth module as a receiver for serial messages.
+// A comprehensive guide for connecting and configuring the HC-06 can be read here: https://www.aranacorp.com/en/arduino-and-bluetooth-module-hc-06/
+// We use software serial here instead of Arduino's hardware serial as this allows for programming it without disconnecting the bluetooth module. 
 // Connect the Arduino RX on pin 4 to the HC-06 TX.
 // Connect the Arduino TX on pin 5 to the HC-06 RX through a voltage divider.
 SoftwareSerial BTserial(4,5); // RX | TX
@@ -42,7 +54,12 @@ void setup() {
 }
 
 void loop() {
-
+  
+  // read the incoming serial messages - this is how we communicate the rotation angle and direction
+  // e.g.:    "5" - rotates 5 degrees clockwise
+  //         "-5" - rotates 5 degrees counter-clockwise 
+  //        "2.5" - rotates 2.5 degrees clockwise
+  //       "-2.5" - rotates 2.5 degrees counter-clockwise 
   while (BTserial.available() > 0) {
     int inChar = BTserial.read();
 
@@ -55,7 +72,7 @@ void loop() {
       inString += (char)inChar;
     }
     // if you get a newline, print the string,
-    // then the string's value as a float:
+    // then convert the string's value to a float:
     else {
       angle = inString.toFloat();
       sendFlag = true;
